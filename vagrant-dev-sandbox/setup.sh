@@ -16,12 +16,11 @@ SSH_USER="vagrant"
 # add more loopback IPs in order we can launch many Cassandra processes  in single machine
 ##########################
 route add -host 127.0.0.2 dev lo
-route add -host 127.0.0.3 dev lo
 route add -host 127.0.0.4 dev lo
 
 
 ##########################
-# install Cassandra with environment configuration files from provisioning
+# install Cassandra and prepare configuration files for multi nodes from provisioning location
 ##########################
 [ -f "/home/$SSH_USER/downloads/apache-cassandra-2.1.5-bin.tar.gz" ] || {
   # Cassandra package is unavailable, download from Internet now
@@ -32,27 +31,27 @@ route add -host 127.0.0.4 dev lo
 }
 
 [ -d "/home/$SSH_USER/apps/apache-cassandra-2.1.5" ] || {
-  # extract compressed package and create configuration folder for many Cassandra processes
   su - $SSH_USER -c 'mkdir ~/apps'
   su - $SSH_USER -c 'tar -zxf ~/downloads/apache-cassandra-2.1.5-bin.tar.gz -C ~/apps/'
 }
 
-su - $SSH_USER -c 'ln -sf ~/apps/apache-cassandra-2.1.5 ~/apps/cassandra'
-# separate configuration folders
+su - $SSH_USER -c 'ln -sf ~/apps/apache-cassandra-2.1.5 ~/apps/cassandra' # reduce the path length
+
+# separate configuration folders for nodes
 su - $SSH_USER -c 'cp -r ~/apps/cassandra/conf ~/apps/cassandra/conf-node1'
 su - $SSH_USER -c 'cp -r ~/apps/cassandra/conf ~/apps/cassandra/conf-node2'
-su - $SSH_USER -c 'cp -r ~/apps/cassandra/conf ~/apps/cassandra/conf-node3'
 su - $SSH_USER -c 'cp -r ~/apps/cassandra/conf ~/apps/cassandra/conf-seed'
 
-# copy provisioned environment-specific files for processes
+# copy provisioned environment-specific files for nodes
 su - $SSH_USER -c 'cp ~/provision/cassandra-conf/cassandra-node1.yaml ~/apps/cassandra/conf-node1/cassandra.yaml'
+su - $SSH_USER -c 'cp ~/provision/cassandra-conf/cassandra-env-node1.sh ~/apps/cassandra/conf-node1/cassandra-env.sh'
 su - $SSH_USER -c 'cp ~/provision/cassandra-conf/cassandra-node2.yaml ~/apps/cassandra/conf-node2/cassandra.yaml'
-su - $SSH_USER -c 'cp ~/provision/cassandra-conf/cassandra-node3.yaml ~/apps/cassandra/conf-node3/cassandra.yaml'
+su - $SSH_USER -c 'cp ~/provision/cassandra-conf/cassandra-env-node2.sh ~/apps/cassandra/conf-node2/cassandra-env.sh'
 su - $SSH_USER -c 'cp ~/provision/cassandra-conf/cassandra-seed.yaml ~/apps/cassandra/conf-seed/cassandra.yaml'
 
 
 ##########################
-# create data and log folders for Cassandra process (follow pre-defined structure by Cassandra)
+# create data and log folders following pre-defined structure by Cassandra
 ##########################
 su - $SSH_USER -c 'mkdir ~/data'
 
@@ -72,14 +71,6 @@ su - $SSH_USER -c 'mkdir ~/data/cassandra-node2/data/data'
 su - $SSH_USER -c 'mkdir ~/data/cassandra-node2/data/commitlog'
 su - $SSH_USER -c 'mkdir ~/data/cassandra-node2/data/saved_caches'
 
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node3'
-su - $SSH_USER -c 'ln -sf ~/apps/cassandra/lib ~/data/cassandra-node3/' # copy cassandra .jar files
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node3/logs'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node3/data'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node3/data/data'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node3/data/commitlog'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node3/data/saved_caches'
-
 su - $SSH_USER -c 'mkdir ~/data/cassandra-seed'
 su - $SSH_USER -c 'ln -sf ~/apps/cassandra/lib ~/data/cassandra-seed/' # copy cassandra .jar files
 su - $SSH_USER -c 'mkdir ~/data/cassandra-seed/logs'
@@ -90,6 +81,6 @@ su - $SSH_USER -c 'mkdir ~/data/cassandra-seed/data/saved_caches'
 
 
 ##########################
-# enable execution permission on provisioned shell files
+# enable execution permission for launching scripts
 ##########################
 su - $SSH_USER -c 'chmod 755 ~/provision/*.sh'

@@ -7,6 +7,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # configure settings for guest OS (virtual machine)
   config.vm.box = "ubuntu/trusty64"
   config.vm.hostname = "ubuntu-dev-sandbox"
   config.vm.network "private_network", ip: "192.168.33.10"
@@ -38,13 +39,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", inline: %q|if [ ! -d "/home/vagrant/provision/cassandra-conf" ]; then mkdir /home/vagrant/provision/cassandra-conf; fi|, privileged: false
   config.vm.provision "file", source: "provision/cassandra-conf/cassandra-node1.yaml", destination: "/home/vagrant/provision/cassandra-conf/cassandra-node1.yaml"
   config.vm.provision "file", source: "provision/cassandra-conf/cassandra-node2.yaml", destination: "/home/vagrant/provision/cassandra-conf/cassandra-node2.yaml"
-  config.vm.provision "file", source: "provision/cassandra-conf/cassandra-node3.yaml", destination: "/home/vagrant/provision/cassandra-conf/cassandra-node3.yaml"
   config.vm.provision "file", source: "provision/cassandra-conf/cassandra-seed.yaml", destination: "/home/vagrant/provision/cassandra-conf/cassandra-seed.yaml"
+  config.vm.provision "file", source: "provision/cassandra-conf/cassandra-env-node1.sh", destination: "/home/vagrant/provision/cassandra-conf/cassandra-env-node1.sh"
+  config.vm.provision "file", source: "provision/cassandra-conf/cassandra-env-node2.sh", destination: "/home/vagrant/provision/cassandra-conf/cassandra-env-node2.sh"
   config.vm.provision "file", source: "provision/start-cassandra-node1.sh", destination: "/home/vagrant/provision/start-cassandra-node1.sh"
   config.vm.provision "file", source: "provision/start-cassandra-node2.sh", destination: "/home/vagrant/provision/start-cassandra-node2.sh"
-  config.vm.provision "file", source: "provision/start-cassandra-node3.sh", destination: "/home/vagrant/provision/start-cassandra-node3.sh"
   config.vm.provision "file", source: "provision/start-cassandra-seed.sh", destination: "/home/vagrant/provision/start-cassandra-seed.sh"
+  
 
-  # set up things in guest OS
+  # set up things in guest OS so that you don't have to do anything :)
   config.vm.provision "shell", path: "setup.sh"
 end
