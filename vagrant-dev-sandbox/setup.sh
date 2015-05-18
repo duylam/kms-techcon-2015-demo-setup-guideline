@@ -13,7 +13,8 @@ SSH_USER="vagrant"
 
 
 ##########################
-# add more loopback IPs in order we can launch many Cassandra processes  in single machine
+# add more loopback IPs in order we can launch many Cassandra processes in single machine
+# new IP can be removed by `$ sudo route del -host 127.0.0.2`
 ##########################
 route add -host 127.0.0.2 dev lo
 route add -host 127.0.0.4 dev lo

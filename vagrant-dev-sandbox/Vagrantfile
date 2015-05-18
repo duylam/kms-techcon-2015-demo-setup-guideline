@@ -7,6 +7,14 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # NOTE FOR YOU
+  # If you want to share files between your host OS and Ubuntu server,
+  # please adjust the path and remove comment for below setting item
+  # Then you can transfer files in your host OS (e.g. Windows) to Ubuntu just
+  # by copying them to "C:/guest-os" (feel free to use another location) and then
+  # access "/host-data" folder in Ubuntu server to get them
+  # config.vm.synced_folder "C:/guest-os", "/host-data"
+
   # configure settings for guest OS (virtual machine)
   config.vm.box = "ubuntu/trusty64"
   config.vm.hostname = "ubuntu-dev-sandbox"
