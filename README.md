@@ -37,6 +37,8 @@ Now you have everything to launch and play on the Cassandra cluster. Go ahead an
 
 Once the machine is ready, open 04 terminal windows and remote to the Ubuntu server (`vagrant ssh`). We're going to start "seed" Cassandra node first, and when it is ready, we will start Cassandra node 01 and 02. Since Cassandra nodes are run in foreground mode which blocks you from executing other commands, the last terminal window is where you can explore the Cassandra cluster
 
+*A seed node is a node that is contacted by other nodes when they first start up and join the cluster. A cluster can have multiple seed nodes*
+
 In terminal 01, type `~/provision/start-cassandra-seed.sh` and wait until the logging message says it's ready for client connection. After that, in terminal 02 and 03, type `~/provision/start-cassandra-node1.sh` and `~/provision/start-cassandra-node2.sh` on each one, then wait for the same ready message in terminal 01. **Note:** to stop nodes, press `Ctrl + C`
 
 Now the Cassandra cluster is ready. You can connect to Cassandra cluster in terminal 04 and explore anything you like. The script `start-cassandra-seed.sh` launches "seed" node listening on `127.0.0.4`, `start-cassandra-node1.sh` on `127.0.0.1` and `start-cassandra-node2.sh` on `127.0.0.2`. To connect to Cassandra cluster, type `~/apps/cassandra/bin/cqlsh 127.0.0.4` (or any of `127.0.0.1`, `127.0.0.2` is ok)
