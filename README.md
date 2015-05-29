@@ -1,4 +1,4 @@
-The presentation slide can be found at *link here*
+The presentation is at [Slideshare](http://www.slideshare.net/duypl/advantages-of-cassandras-masterless-architecture)
 
 # Introduction
 
