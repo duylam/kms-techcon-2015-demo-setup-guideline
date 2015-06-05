@@ -54,32 +54,37 @@ su - $SSH_USER -c 'cp ~/provision/cassandra-conf/cassandra-seed.yaml ~/apps/cass
 ##########################
 # create data and log folders following pre-defined structure by Cassandra
 ##########################
-su - $SSH_USER -c 'mkdir ~/data'
+function createDir {
+  local cmd="[ -d $1 ] || mkdir $1"
+  su - $SSH_USER -c "$cmd"
+}
 
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node1'
+createDir '~/data'
+
+createDir '~/data/cassandra-node1'
+createDir '~/data/cassandra-node1/logs'
+createDir '~/data/cassandra-node1/data'
+createDir '~/data/cassandra-node1/data/data'
+createDir '~/data/cassandra-node1/data/commitlog'
+createDir '~/data/cassandra-node1/data/saved_caches'
+
+createDir '~/data/cassandra-node2'
+createDir '~/data/cassandra-node2/logs'
+createDir '~/data/cassandra-node2/data'
+createDir '~/data/cassandra-node2/data/data'
+createDir '~/data/cassandra-node2/data/commitlog'
+createDir '~/data/cassandra-node2/data/saved_caches'
+
+createDir '~/data/cassandra-seed'
+createDir '~/data/cassandra-seed/logs'
+createDir '~/data/cassandra-seed/data'
+createDir '~/data/cassandra-seed/data/data'
+createDir '~/data/cassandra-seed/data/commitlog'
+createDir '~/data/cassandra-seed/data/saved_caches'
+
 su - $SSH_USER -c 'ln -sf ~/apps/cassandra/lib ~/data/cassandra-node1/' # copy cassandra .jar files
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node1/logs'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node1/data'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node1/data/data'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node1/data/commitlog'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node1/data/saved_caches'
-
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node2'
 su - $SSH_USER -c 'ln -sf ~/apps/cassandra/lib ~/data/cassandra-node2/' # copy cassandra .jar files
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node2/logs'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node2/data'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node2/data/data'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node2/data/commitlog'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-node2/data/saved_caches'
-
-su - $SSH_USER -c 'mkdir ~/data/cassandra-seed'
 su - $SSH_USER -c 'ln -sf ~/apps/cassandra/lib ~/data/cassandra-seed/' # copy cassandra .jar files
-su - $SSH_USER -c 'mkdir ~/data/cassandra-seed/logs'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-seed/data'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-seed/data/data'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-seed/data/commitlog'
-su - $SSH_USER -c 'mkdir ~/data/cassandra-seed/data/saved_caches'
-
 
 ##########################
 # enable execution permission for launching scripts

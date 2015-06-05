@@ -7,7 +7,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  # NOTE FOR YOU
+  # NOTE FOR SHARING BETWEEN HOST AND GUEST
   # If you want to share files between your host OS and Ubuntu server,
   # please adjust the path and remove comment for below setting item
   # Then you can transfer files in your host OS (e.g. Windows) to Ubuntu just
@@ -43,8 +43,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # copy files to guest OS, what's pitty that vagrant hasn't supported copy folder yet :(
-  config.vm.provision "shell", inline: %q|if [ ! -d "/home/vagrant/provision" ]; then mkdir /home/vagrant/provision; fi|, privileged: false
-  config.vm.provision "shell", inline: %q|if [ ! -d "/home/vagrant/provision/cassandra-conf" ]; then mkdir /home/vagrant/provision/cassandra-conf; fi|, privileged: false
+  config.vm.provision "shell", inline: %q{[ -d "/home/vagrant/provision" ] || mkdir /home/vagrant/provision}, privileged: false
+  config.vm.provision "shell", inline: %q{[ -d "/home/vagrant/provision/cassandra-conf" ] || mkdir /home/vagrant/provision/cassandra-conf}, privileged: false
   config.vm.provision "file", source: "provision/cassandra-conf/cassandra-node1.yaml", destination: "/home/vagrant/provision/cassandra-conf/cassandra-node1.yaml"
   config.vm.provision "file", source: "provision/cassandra-conf/cassandra-node2.yaml", destination: "/home/vagrant/provision/cassandra-conf/cassandra-node2.yaml"
   config.vm.provision "file", source: "provision/cassandra-conf/cassandra-seed.yaml", destination: "/home/vagrant/provision/cassandra-conf/cassandra-seed.yaml"
@@ -53,6 +53,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "file", source: "provision/start-cassandra-node1.sh", destination: "/home/vagrant/provision/start-cassandra-node1.sh"
   config.vm.provision "file", source: "provision/start-cassandra-node2.sh", destination: "/home/vagrant/provision/start-cassandra-node2.sh"
   config.vm.provision "file", source: "provision/start-cassandra-seed.sh", destination: "/home/vagrant/provision/start-cassandra-seed.sh"
+  config.vm.provision "file", source: "provision/setup.cql", destination: "/home/vagrant/provision/setup.cql"
   
 
   # set up things in guest OS so that you don't have to do anything :)
