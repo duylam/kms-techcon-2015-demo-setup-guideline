@@ -11,14 +11,6 @@ CREATE TABLE participant(
   PRIMARY KEY (department, employee_id)
 );
 
-INSERT INTO participant(department, employee_id, name) 
-VALUES ('HR', 20, 'Nguyen Quoc Hung');
+INSERT INTO participant(department, employee_id, name) VALUES ('HR', 1, 'Nguyen Quoc Hung');
 
-INSERT INTO participant(department, employee_id, name) 
-VALUES ('HR', 200, 'Le Huu Hoang Uyen');
-
-INSERT INTO participant(department, employee_id, name) 
-VALUES ('Director', 100, 'Bui Viet Thanh Phong');
-
-INSERT INTO participant(department, employee_id, name) 
-VALUES ('RD', 24, 'Lam Phuong Duy');
+INSERT INTO participant(department, employee_id, name) VALUES ('RD', 2, 'Lam Phuong Duy');
