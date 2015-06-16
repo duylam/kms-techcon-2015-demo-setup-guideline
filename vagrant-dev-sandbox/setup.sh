@@ -5,9 +5,13 @@ SSH_USER="vagrant"
 ##########################
 # install Java Runtime Environment
 ##########################
+echo "Detecting Java runtime"
 `java -version` || {
   # java is unavailable, install now
+  echo "Updating apt-get"
   apt-get update
+  
+  echo "Installing Java runtime"
   apt-get install -y default-jre
 }
 
@@ -28,6 +32,7 @@ route add -host 127.0.0.4 dev lo
   su - $SSH_USER -c 'mkdir ~/downloads'
   
   # hopefully the link is always available 
+  echo "Downloading Cassandra"
   su - $SSH_USER -c 'wget -q http://mirrors.maychuviet.vn/apache/cassandra/2.1.5/apache-cassandra-2.1.5-bin.tar.gz -O ~/downloads/apache-cassandra-2.1.5-bin.tar.gz'
 }
 
