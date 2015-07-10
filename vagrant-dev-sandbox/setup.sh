@@ -2,6 +2,11 @@
 
 SSH_USER="vagrant"
 
+function createDir {
+  local cmd="[ -d $1 ] || mkdir $1"
+  su - $SSH_USER -c "$cmd"
+}
+
 ##########################
 # install Java Runtime Environment
 ##########################
@@ -27,17 +32,14 @@ route add -host 127.0.0.4 dev lo
 ##########################
 # install Cassandra and prepare configuration files for multi nodes from provisioning location
 ##########################
-[ -f "/home/$SSH_USER/downloads/apache-cassandra-2.1.5-bin.tar.gz" ] || {
+[ -d "/home/$SSH_USER/apps/apache-cassandra-2.1.5" ] || {
   # Cassandra package is unavailable, download from Internet now
-  su - $SSH_USER -c 'mkdir ~/downloads'
+  createDir '~/downloads'
   
   # hopefully the link is always available 
   echo "Downloading Cassandra"
-  su - $SSH_USER -c 'wget -q http://mirrors.maychuviet.vn/apache/cassandra/2.1.5/apache-cassandra-2.1.5-bin.tar.gz -O ~/downloads/apache-cassandra-2.1.5-bin.tar.gz'
-}
-
-[ -d "/home/$SSH_USER/apps/apache-cassandra-2.1.5" ] || {
-  su - $SSH_USER -c 'mkdir ~/apps'
+  su - $SSH_USER -c 'wget -q https://archive.apache.org/dist/cassandra/2.1.5/apache-cassandra-2.1.5-bin.tar.gz -O ~/downloads/apache-cassandra-2.1.5-bin.tar.gz'
+  createDir '~/apps'
   su - $SSH_USER -c 'tar -zxf ~/downloads/apache-cassandra-2.1.5-bin.tar.gz -C ~/apps/'
 }
 
@@ -59,10 +61,6 @@ su - $SSH_USER -c 'cp ~/provision/cassandra-conf/cassandra-seed.yaml ~/apps/cass
 ##########################
 # create data and log folders following pre-defined structure by Cassandra
 ##########################
-function createDir {
-  local cmd="[ -d $1 ] || mkdir $1"
-  su - $SSH_USER -c "$cmd"
-}
 
 createDir '~/data'
 
